@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package translation;
+
+// Go specific option to tell it where to put the generated file
+option go_package = "./pb";
+
+// The Service definition
+service Translator {
+  rpc Translate (TranslateRequest) returns (TranslateResponse);
+}
+
+// The Input
+message TranslateRequest {
+  string text = 1;
+  string source_lang = 2; // e.g. "de"
+  string target_lang = 3; // e.g. "es"
+}
+
+// The Output
+message TranslateResponse {
+  string translated_text = 1;
+}
