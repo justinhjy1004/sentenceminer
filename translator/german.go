@@ -10,13 +10,11 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// 1. Define a struct to hold the persistent client
 type TranslationService struct {
 	client pb.TranslatorClient
 	conn   *grpc.ClientConn
 }
 
-// 2. Initialize the connection ONCE (e.g., at app startup)
 func NewTranslationService(address string) (*TranslationService, error) {
 	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

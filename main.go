@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	sample := sampler.SampleGermanSentence(10)
+	sample := sampler.SampleGermanSentence(10, 10)
 
 	translatorService, _ := translator.NewTranslationService("localhost:50051")
 

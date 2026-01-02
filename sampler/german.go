@@ -7,6 +7,8 @@ import (
 	"log"
 	"math/rand/v2"
 	"os"
+	"slices"
+	"strings"
 
 	"github.com/gocarina/gocsv"
 )
@@ -16,6 +18,8 @@ type Sentence struct {
 	Language string `csv:"1"`
 	Text     string `csv:"2"`
 }
+
+var sentenceFile string = "./sampler/deu_sentences.tsv"
 
 func SampleWithoutReplacement[T any](input []T, k int) []T {
 
@@ -40,9 +44,9 @@ func SampleWithoutReplacement[T any](input []T, k int) []T {
 
 }
 
-func SampleGermanSentence(k int) []*Sentence {
+func LoadGermanSentenceFile(maxWords int) []*Sentence {
 
-	file, _ := os.Open("./sampler/deu_sentences.tsv")
+	file, _ := os.Open(sentenceFile)
 
 	var sentences []*Sentence
 
@@ -58,6 +62,21 @@ func SampleGermanSentence(k int) []*Sentence {
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 	}
+
+	if maxWords != -1 {
+
+		sentences = slices.DeleteFunc(sentences, func(s *Sentence) bool {
+			return len(strings.Fields(s.Text)) > maxWords
+		})
+	}
+
+	return sentences
+
+}
+
+func SampleGermanSentence(k int, maxWords int) []*Sentence {
+
+	sentences := LoadGermanSentenceFile(maxWords)
 
 	sampledSentences := SampleWithoutReplacement(sentences, k)
 

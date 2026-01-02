@@ -84,5 +84,5 @@ coverage.xml
 
 *Zone.Identifier
 
-test*.ipynb
+*.ipynb
 *.onnx
