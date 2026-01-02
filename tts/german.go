@@ -6,9 +6,12 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
+
+	"github.com/justinhjy1004/sentenceminer/sampler"
 )
 
-func GermanTextToSpeech(directory string, id string, text string) {
+func GenerateGermanSpeechAudio(directory string, sentences []*sampler.Sentence) {
 
 	err := os.MkdirAll(directory, 0755)
 	if err != nil {
@@ -16,10 +19,20 @@ func GermanTextToSpeech(directory string, id string, text string) {
 		return
 	}
 
+	for _, s := range sentences {
+		GermanTextToSpeech(directory, strconv.Itoa(s.ID), s.Text)
+	}
+
+	return
+
+}
+
+func GermanTextToSpeech(directory string, id string, text string) {
+
 	cmd := exec.Command("piper",
 		"--model", "./tts/de-thorsten-high.onnx",
 		"--length_scale", "1.2",
-		"--output-file", fmt.Sprintf("%s/%s.wav", directory, id),
+		"--output-file", fmt.Sprintf("%s/de-es-%s.wav", directory, id),
 	)
 
 	stdin, err := cmd.StdinPipe()
